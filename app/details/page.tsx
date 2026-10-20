@@ -4,7 +4,7 @@
 import Image from "next/image";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import Link from "next/link";
-import { useState } from "react";
+import { useState , Suspense } from "react";
 import Toast from "@/components/Toast";
 
 import {
