@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {Package} from "lucide-react";
 
 import { decreaseQuantity, increaseQuantity, removeFromCart } from "@/redux/features/cart/cartSlice";
 
@@ -38,6 +39,11 @@ function CartPage() {
           <p className="mt-2 text-gray-500">
             Your Cart is currently empty!
           </p>
+          
+          <Link href="/products" className="mt-6 inline-flex gap-3 items-center justify-center text-white bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-lg">
+           <Package size={20} />
+           Browse Products
+          </Link>
         </div>
       ) : (
         <>

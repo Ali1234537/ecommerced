@@ -1,14 +1,9 @@
-import type { Metadata } from "next";
+ 
 import ReduxProvider from "@/redux/Provider";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import ConditionalNavbar from "@/components/ConditionalNavbar";
+import ConditionalFooter from "@/components/CondtionalFooter";
  
-
-/*export const metadata:Metadata={
-    title:"Ecommerce",
-    description:"Ecommerce website",
-};*/
-
 export default function RootLayout({
     children,
 }:Readonly<{
@@ -18,10 +13,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          
-          <Navbar/>
-           
+          <ConditionalNavbar/>
           {children}
+          <ConditionalFooter/>
         </ReduxProvider>
       </body>
     </html>

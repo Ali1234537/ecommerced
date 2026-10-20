@@ -3,9 +3,29 @@
 
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
-
+import { useRouter } from "next/navigation";
+import { useState ,useEffect } from "react";
 function OrderShow() {
   const orders = useAppSelector((state) => state.Order.orders);
+  const router = useRouter();
+  const [checking , setChecking] = useState(true);
+  
+  useEffect(()=>{
+    const orderCheck = localStorage.getItem("orderCheck");
+    
+    if(orderCheck !== "true"){
+      router.replace("/");
+      return
+    }
+    
+    localStorage.removeItem("orderCheck");
+    setChecking(false);
+  },[router]);
+
+  if(checking){
+    return null;
+  }
+  
 
   return (
     <main className="min-h-screen p-8">

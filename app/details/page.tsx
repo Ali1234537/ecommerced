@@ -1,9 +1,12 @@
 
 "use client";
-import { Suspense } from "react";
+
 import Image from "next/image";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import Link from "next/link";
+import { useState } from "react";
+import Toast from "@/components/Toast";
+
 import {
   addToCart,
   increaseQuantity,
@@ -11,12 +14,15 @@ import {
   removeFromCart,
 } from "@/redux/features/cart/cartSlice";
 import { useSearchParams } from "next/navigation";
-import { ArrowBigLeftDash, Info, ShoppingCart, CheckCircle2 } from "lucide-react";
 
-function ProductDetailsContent() {
+import { Info, ShoppingCart, CheckCircle2, ChevronRight, House, Package } from "lucide-react";
+
+function ProductDetails() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const id = searchParams.get("id");
+  
+  const [showToast , setShowToast] = useState(false);
 
   const products = useAppSelector((state) => state.product.Products);
   const cartItems = useAppSelector((state) => state.cart.items);
@@ -41,9 +47,49 @@ function ProductDetailsContent() {
 
   return (
     <main className="min-h-screen bg-red-100 px-4 py-8 sm:px-8">
-      <Link href="/" className="px-5 py-3 rounded-lg text-white bg-gray-700 mb-6 inline-flex items-center gap-2">
-        <ArrowBigLeftDash className="h-5 w-5" /> Back
-      </Link>
+      <Toast message="Product Added to Cart!"
+       show = {showToast}
+       onClose={()=> setShowToast(false)}
+       />
+
+      <nav aria-label="Breadcrumb" className="mb-8 border-gray-400 border px-6 py-3 rounded-xl  w-fit">
+        <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-700">
+          <li>
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-black transition hover:underline font-semibold"
+            >
+              <House size={16} />
+              Home
+            </Link>
+          </li>
+
+          <li aria-hidden="true">
+            <ChevronRight size={16} className="text-gray-400" />
+          </li>
+
+          <li>
+            <Link
+              href="/products"
+              className="flex items-center gap-1 transition text-black font-semibold  hover:underline"
+            >
+              <Package size={16} className="text-black" />
+              Products
+            </Link>
+          </li>
+
+          <li aria-hidden="true">
+            <ChevronRight size={16} className="text-gray-400" />
+          </li>
+
+          <li
+            aria-current="page"
+            className="font-bold text-black "
+          >
+            {items.name}
+          </li>
+        </ol>
+      </nav>
       <div className="mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2">
         <div className="flex h-full min-h-[400px] w-full items-center justify-center overflow-hidden ">
           <Image
@@ -51,7 +97,7 @@ function ProductDetailsContent() {
             alt={items.name}
             width={200}
             height={200}
-            className="h-full w-full object-contain transition-transform duration-200 hover:scale-100 rounded-lg"
+            className="h-[400px] w-[600px] object-contain transition-transform duration-200 hover:scale-100 rounded-lg"
           />
         </div>
 
@@ -104,21 +150,13 @@ function ProductDetailsContent() {
             </div>
           </div>
 
-          {/*<button
-            onClick={() => {
-              dispatch(addToCart(items));
-              alert("Product added to cart!");
-            }}
-            className="rounded bg-black px-3 py-2 text-white hover:bg-gray-800 whitespace-nowrap"
-          >
-            Add to Cart
-          </button>*/}
+
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => {
                 dispatch(addToCart(items));
-                alert("Product added to cart!");
+                setShowToast(true);
               }}
               className="rounded bg-gray-700 px-3 py-2 text-white hover:bg-gray-800 whitespace-nowrap cursor-pointer"
             >
@@ -175,8 +213,8 @@ function ProductDetailsContent() {
           </div>
         </div>
       </div>
-         
-         <h2 className="text-center text-2xl font-bold mt-10 mx-auto w-fit bg-gray-800 text-white px-6 py-2 rounded-t-lg">Why Choose Us?</h2>
+
+      <h2 className="text-center text-2xl font-bold mt-10 mx-auto w-fit bg-gray-700 text-white px-6 py-2 rounded-t-xl">Why Choose Us?</h2>
       <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-3">
         <div className="rounded-xl border bg-red-200 p-6">
           <h3 className="mb-2 font-semibold text-black text-center">
@@ -209,14 +247,4 @@ function ProductDetailsContent() {
   );
 }
 
-export default function ProductDetails() {
-  return (
-    <Suspense
-      fallback={
-        <div className="p-8 text-center">Loading product...</div>
-      }
-    >
-      <ProductDetailsContent />
-    </Suspense>
-  );
-}
+export default ProductDetails;

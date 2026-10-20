@@ -3,12 +3,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Toast from "@/components/Toast";
 
  function Login() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const[showToast , setShowToast] = useState(false);
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,20 +23,29 @@ import { useRouter } from "next/navigation";
     if (!localStorage.getItem("CustomerId")) {
       localStorage.setItem("CustomerId", crypto.randomUUID());
     }
-
+   
+    setShowToast(true);
      
     const location = new URLSearchParams(window.location.search);
     const goto = location.get("redirect");
-
-    if (goto === "/checkout") {
-      router.push("/checkout");
-    } else {
-      router.push("/products");
-    }
+     
+    setTimeout(()=>{
+      if(goto === "/checkout"){
+        router.push("/checkout");
+      }else{
+        router.push("/products");
+      }
+    },2000);
+    
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-5">
+      <Toast message="User Login Successful!"
+      show = {showToast}
+      onClose={()=> setShowToast(false)}
+      />
+
       <form
         onSubmit={handleLogin}
         className="w-full max-w-md space-y-5 rounded-xl bg-white p-8 shadow-lg"
@@ -71,10 +83,14 @@ import { useRouter } from "next/navigation";
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-black p-3 font-semibold text-white hover:bg-gray-800"
+          className="w-full rounded-lg bg-gray-800 p-3 font-semibold text-white hover:bg-black cursor-pointer"
         >
           Login
         </button>
+
+        <Link href="/" className="flex justify-center w-full text-center py-3 bg-gray-600 rounded-lg text-white">
+          Back Home
+        </Link>
       </form>
     </main>
   );

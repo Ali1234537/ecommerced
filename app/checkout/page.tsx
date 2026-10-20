@@ -196,7 +196,7 @@ export default function Checkout() {
             onClick={() => router.push("/login")}
             className="w-full rounded-lg bg-gray-700 hover:bg-gray-800 p-3 font-semibold text-white cursor-pointer"
           >
-            Login as Customer
+            Login as User
           </button>
         </div>)}
 
