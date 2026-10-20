@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 
 import { Info, ShoppingCart, CheckCircle2, ChevronRight, House, Package } from "lucide-react";
 
-function ProductDetails() {
+function ProductDetailsContent() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const id = searchParams.get("id");
@@ -247,4 +247,16 @@ function ProductDetails() {
   );
 }
 
-export default ProductDetails;
+export default function ProductDetails() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen p-8 text-center">
+          Loading product details...
+        </div>
+      }
+    >
+      <ProductDetailsContent />
+    </Suspense>
+  );
+}
